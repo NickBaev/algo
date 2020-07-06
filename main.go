@@ -1,14 +1,14 @@
 package main
 
 import (
-	"algo/karatsuba"
+	"algo/secondb"
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 func main() {
-	a := 1234
-	b := 2456
-	fmt.Print(a * b)
-	fmt.Print("\n")
-	fmt.Print(karatsuba.Mult(a, b))
+	rand.Seed(time.Now().Unix())
+	arr := rand.Perm(4096)
+	fmt.Println(secondb.Secondb(arr))
 }
