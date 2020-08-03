@@ -1,6 +1,6 @@
 package secondb
 
-func Secondb(arr []int) int  {
+func Find(arr []int) int  {
 	min, _ := round(arr, len(arr))
 	return min
 }
