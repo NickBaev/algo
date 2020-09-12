@@ -4,6 +4,16 @@ import (
 	"math/rand"
 )
 
+// Sort 64 elements array. Pivot element choice
+//last: n=100 comp=180
+//first: n=100 comp=180
+//rand: n=100 comp=180
+
+// RSelect 64 element array comparisons
+//index=5: n=100 comp=70
+//index=60: n=100 comp=66
+//index=32: n=100 comp=94
+
 func Sort(arr[] int) int {
 	count := make(chan int, 1000)
 	sort(arr, 0, len(arr) - 1, count)

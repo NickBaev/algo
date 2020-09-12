@@ -1,47 +1,51 @@
 package main
 
 import (
-	"algo/quicksort"
-	"math/rand"
-	"time"
+	"algo/kosaraju"
+	"fmt"
 )
 
-// Sort 64 elements array. Pivot element choice
-//last: n=100 comp=180
-//first: n=100 comp=180
-//rand: n=100 comp=180
-
-// RSelect 64 element array comparisons
-//index=5: n=100 comp=70
-//index=60: n=100 comp=66
-//index=32: n=100 comp=94
 func main() {
-	rselect()
-}
-
-func rselect() {
-	n := 100
-	comp := 0
-	for i := 0; i < n; i++ {
-		rand.Seed(time.Now().UnixNano())
-		for i := 0; i < n; i++ {
-			a := rand.Perm(64)
-			_, c := quicksort.RSelect(a, 32)
-			comp += c
-		}
+	v := []int{1,2,3,4,5,6,7,8,9,10,11,12}
+	e := []kosaraju.SimpleEdge{
+		{1,2},
+		{2, 3},
+		{2, 4},
+		{2, 5},
+		{3, 6},
+		{4, 5},
+		{4, 7},
+		{5, 2},
+		{5, 6},
+		{5, 7},
+		{6, 3},
+		{6, 8},
+		{7, 8},
+		{7, 10},
+		{8, 7},
+		{9, 7},
+		{10, 9},
+		{10, 11},
+		{11, 12},
+		{12, 10},
 	}
-	println(comp/(n*n))
-}
+	graph := kosaraju.FindSCC(v, e)
+	fmt.Println(kosaraju.GroupBySCC(graph))
 
-func sort()  {
-	n := 100
-	comp := 0
-	for i := 0; i < n; i++ {
-		rand.Seed(time.Now().UnixNano())
-		for i := 0; i < n; i++ {
-			a := rand.Perm(64)
-			comp += quicksort.Sort(a)
-		}
+	v = []int{1,2,3,4,5,6,7,8}
+	e = []kosaraju.SimpleEdge{
+		{1, 2},
+		{2, 3},
+		{3, 1},
+		{3, 4},
+		{5, 4},
+		{6, 4},
+		{8, 6},
+		{6, 7},
+		{7, 8},
+		{4, 3},
+		{4, 6},
 	}
-	println(comp/(n*n))
+	graph = kosaraju.FindSCC(v, e)
+	fmt.Println(kosaraju.GroupBySCC(graph))
 }
