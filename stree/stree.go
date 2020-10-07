@@ -53,40 +53,32 @@ func (tree *Tree) Delete(key int) {
 	}
 	// no child
 	if node.Right == nil && node.Left == nil {
-		if node.Parent.Key < node.Key {
-			node.Parent.Right = nil
-			return
-		}
-		node.Parent.Left = nil
+		deleteNoChild(node, tree)
+		tree.Size--
 		return
 	}
 	// two child
 	if node.Right != nil && node.Left != nil {
-		predecessor := predecessor(node)
-		//detach predecessor
-		if predecessor.Key > predecessor.Parent.Key {
-			if predecessor.Left != nil {
-				predecessor.Parent.Right = predecessor.Left
-				predecessor.Left.Parent = predecessor.Parent
-			} else {
-				predecessor.Parent.Right = nil
-			}
-		} else {
-			if predecessor.Left != nil {
-				predecessor.Parent.Left = predecessor.Left
-				predecessor.Left.Parent = predecessor.Parent
-			} else {
-				predecessor.Parent.Left = nil
-			}
-		}
-		//swap current node and predecessor
-		//TODO swap pointer you lazy fuck!
-		node.Key = predecessor.Key
-		node.Value = predecessor.Value
+		deleteTwoChild(node, tree)
 		tree.Size--
 		return
 	}
 	// only one child
+	deleteOneChild(node, tree)
+	tree.Size--
+	return
+}
+
+func deleteNoChild(node *Node, tree *Tree)  {
+	if node.Parent.Key < node.Key {
+		node.Parent.Right = nil
+		return
+	}
+	node.Parent.Left = nil
+	return
+}
+
+func deleteOneChild(node *Node, tree *Tree) {
 	if node.Parent == nil {
 		if node.Right != nil {
 			node.Right.Parent = nil
@@ -96,7 +88,6 @@ func (tree *Tree) Delete(key int) {
 			node.Left.Parent = nil
 			tree.Root = node.Left
 		}
-		tree.Size--
 		return
 	}
 	if node.Key > node.Parent.Key {
@@ -108,7 +99,6 @@ func (tree *Tree) Delete(key int) {
 			node.Parent.Right = node.Left
 			node.Left.Parent = node.Parent
 		}
-		tree.Size--
 		return
 	}
 	if node.Right != nil {
@@ -119,9 +109,43 @@ func (tree *Tree) Delete(key int) {
 		node.Parent.Left = node.Left
 		node.Left.Parent = node.Parent
 	}
-	tree.Size--
 	return
 }
+
+func deleteTwoChild(node *Node, tree *Tree) {
+	predecessor := predecessor(node)
+	//detach predecessor
+	if predecessor.Key > predecessor.Parent.Key {
+		if predecessor.Left != nil {
+			predecessor.Parent.Right = predecessor.Left
+			predecessor.Left.Parent = predecessor.Parent
+		} else {
+			predecessor.Parent.Right = nil
+		}
+	} else {
+		if predecessor.Left != nil {
+			predecessor.Parent.Left = predecessor.Left
+			predecessor.Left.Parent = predecessor.Parent
+		} else {
+			predecessor.Parent.Left = nil
+		}
+	}
+	//swap current node and predecessor
+	predecessor.Right = node.Right
+	predecessor.Left = node.Left
+	predecessor.Parent = node.Parent
+	if node.Parent == nil {
+		tree.Root = predecessor
+	} else {
+		if node.Key > node.Parent.Key {
+			node.Parent.Right = predecessor
+		} else {
+			node.Parent.Left = predecessor
+		}
+	}
+	return
+}
+
 
 func search(node *Node, key int) *Node  {
 	if key == node.Key {
